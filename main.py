@@ -1,3 +1,19 @@
+
+DATA_SET_FILE_PATH = "casos_prueba_catedra/"
+
+def get_data_set_from_txt(file : str) -> tuple : 
+    data_set = []
+    file = DATA_SET_FILE_PATH + file
+
+    with open(file,'r') as o_file:
+        o_file.readline() # quito la primera linea de encabezado
+        for line in o_file:
+            aux_list = line.split(",")
+            l_tuple = (int(aux_list[0]), int(aux_list[1].rstrip()))
+            data_set.append(l_tuple)
+    return data_set
+
+
 def get_optimal_analisis_order(teams_list):
     optimal_analisis_order = sorted(teams_list, key= lambda team:team[1], reverse=True)
     return optimal_analisis_order
