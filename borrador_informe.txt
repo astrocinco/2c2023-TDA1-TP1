@@ -1,0 +1,80 @@
+Analisis del problema
+
+Es un problema de tipo scheduling, donde debemos garantizar que se cumplan todas las tareas en el menor tiempo posible. Como datos, se conoce de antemano 
+el tiempo que toma a Scaloni tanto como a alguno de sus ayudantes realizar cada analisis particular. 
+
+En una primera propuesta se podría plantear ordenar de menor a mayor segun el tiempo que toma el analisis a Scaloni
+De esta manera haría que Scaloni esté libre para comenzar un nuevo analisis lo antes posible. 
+
+Probemos un caso:
+
+[Si, Ai]
+[2,5][3,2][4,1]
+
+Como los ayudantes pueden superponerse, el tiempo total que toma el analisis son 10 unidades de tiempo.
+Se puede comprobar facilmente que es el orden optimo:
+
+[2,5][3,2][4,1] = 10 ---> SOLUCION ALGORITMO
+
+[3,2][4,1][2,5] = 14
+[3,2][2,5][4,1] = 10
+[2,5][4,1][3,2] = 12
+[4,1][2,5][3,2] = 11
+[4,1][3,2][2,5] = 14
+
+(ACA VA UN DIBUJO)
+
+Observamos que, en este caso, el algoritmo propuesto alcanza el resultado optimo.
+
+Sin embargo, es muy facil encontrar un contraejemplo. ¿Que pasa si un ayudante tarda muchisimo en relacion al resto de los tiempos? Algo nos indicaria
+que conviene que ese ayudante "colisione" con el resto de los analisis pendientes. Retomaremos esta idea más adelante.
+
+Contraejemplo: 
+
+[Si, Ai]:
+[6,23][5,5][2,1] (DATA_SET ---> 3-elem-counter-ex.txt)
+
+[2,1][5,5][6,23] = 36 ---> SOLUCION ALGORITMO
+
+[6,23][5,5][2,1] = 29 ----> SOLUCION OPTIMA
+
+(ACA VA UN DIBUJO)
+
+
+SOLUCION OPTIMA
+
+Los ayudantes pueden superponerse entre sí, Scaloni no. Esto nos indica que el tiempo mínimo que toma hacer todos los analisis es mayor a la suma
+del tiempo que tarda Scaloni en realizar cada uno (suponiendo que un ayudante no puede tardar tiempo 0 en realizar su analisis). Lo importante acá es que somos capaces de 
+minimizar el tiempo que toma a los ayudantes finalizar los analisis, pero el tiempo total que tomará a Scaloni es siempre el mismo, no importa en qué orden le indiquemos que los realice,
+solo podemos minimizar el tiempo total de los ayudantes. La idea intuitiva aquí será: queremos que el ayudante que termine último esté lo más cercano posible al tiempo de finalización de Scaloni.
+Para esto, el ayudante que más tiempo tarde deberá empezar primero. El ordenamiento propuesto es ordenar de mayor a menor según el tiempo que toma a los ayudantes realizar cada analisis.
+
+ INCLUIR ALGORITMO 
+
+
+
+ANALISIS DE OPTIMALIDAD
+
+A continuación, pretendemos dar pruebas fehacientes de que el resultado alcanzado es el orden óptimo; de más está decir que no hemos encontrado un contraejemplo
+que demuestre lo contrario.
+
+Como ya hemos mencionado más arriba, el tiempo que tarda Scaloni en realizar sus analisis en cualquier orden (Al que llamaremos Ts) puede ser tomado como
+una cota inferior no incluida en el conjunto de resultados posibles de nuestro problema. Luego, el último en terminar de ver su análisis será algún ayudante, al que bautizamos Au.
+Para simplificar primero el problema, supongamos que Au coincide con el ultimo analisis que ha hecho Scaloni. Es decir, el tiempo total del analisis (Tt) será Ts + Au. Resulta obvio,
+con las hipótesis mencionadas, que el menor Tt posible se haya eligiendo como último analisis aquel que tenga menor tiempo de ayudante, minimizando Au ya que Ts se considera constante.
+Con estas ideas en mente, podemos considerar el problema entero: no sabemos a qué analisis corresponde Au, el primer ayudante en empezar podría ser el último en terminar.  
+
+Haremos uso del vocabulario de scheduling y hablaremos de colisiones. Queremos garantizar que Au termine lo más cercano posible a Ts. Como el tiempo que se demora Scaloni en ver los análisis es irreducible,
+lo óptimo sería que el analisis que más tiempo tome a los ayudantes se haga cuanto antes, de esta manera, un analisis largo colisionará con la mayor cantidad de analisis posibles. Dicho en criollo: tenemos n 
+ayudantes para ver n videos, lo mejor sería tener la menor cantidad de ayudantes papando moscas en cada instante; dicho formalmente: buscamos maximizar las colisiones.  
+
+ANALISIS DE RECURRENCIA
+
+https://docs.python.org/3/howto/sorting.html?highlight=timsort Segun python, el sorted se implementa sobre un algoritmo de tipo timsort
+
+DATA_SETS CATEDRA
+
+COMPARACION CON ALGORITMOS DATA_SET_ENORME
+
+
+
