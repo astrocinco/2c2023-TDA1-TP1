@@ -1,4 +1,5 @@
 from sets import *
+import time
 
 CATEDRA_DATA_SET_FILE_PATH = "./casos_prueba_catedra/"
 SCALONI_ANALYSIS = 0
@@ -18,12 +19,22 @@ def aux_get_analisis_duration(analisis_order):
     return team_analisis_max_duration
 
 def get_solution_analysis(teams_list, time_expected=0, show_solution=False):
-    print(f"Solution for a team list of {len(teams_list)} rivals")
+    
+    start_time = time.time()
     solution = get_optimal_analisis_order(teams_list)
-    if(show_solution): print("Optimal order is:", solution)
-    print("Analysis time is:", aux_get_analisis_duration(solution))
-    if(time_expected): print(f"Time expected: {time_expected}")
+    end_time = time.time()
+    
+    solution_time = aux_get_analisis_duration(solution)
+    excecution_time = end_time - start_time
+    
     print("--------------------------------------------------------")
+    print(f"Solution for a team list of {len(teams_list)} rivals")
+    if(show_solution): print("Optimal order is:", solution)
+    print("Analysis time is: ", solution_time)
+    if(time_expected): print("Time expected: ", time_expected)
+    print("Execution time: ", excecution_time)
+    
+    return (solution, solution_time, excecution_time)
     
 def get_catedra_data_sets(path):
     data_sets=[]
