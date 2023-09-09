@@ -1,7 +1,10 @@
+
+import random
+#### CARGAR SET DE DATOS DESDE TXT ####
+
 DATA_SET_FILE_PATH = "casos_prueba_catedra/"
 
-
-def get_data_set_from_txt(file):
+def get_data_set_from_txt(file : str) -> tuple : 
     data_set = []
     file = DATA_SET_FILE_PATH + file
 
@@ -17,6 +20,9 @@ def get_data_set_from_txt(file):
     return data_set
 
 
+####
+
+
 def get_optimal_analisis_order(teams_list):
     optimal_analisis_order = sorted(teams_list, key= lambda team:team[1], reverse=True)
     return optimal_analisis_order
@@ -30,13 +36,18 @@ def aux_get_analisis_duration(analisis_order):
         scaloni_wait_time += team[0]
     return team_analisis_max_duration
 
+def make_teams_list(n_rivals):
+    teams_list = []
+    for i in range(n_rivals):
+        teams_list.append((random.randint(0, n_rivals+10),  random.randint(0, n_rivals+10)))
+    return teams_list
+
+
 def main():
-
-    teams_list = get_data_set_from_txt('10000-elem.txt')
-    
-    return get_optimal_analisis_order(teams_list)
+    pass
 
 
-print("Hello world! ★★★")
-optimal_order = main()
-print(aux_get_analisis_duration(optimal_order))
+if __name__ == "__main__":
+    print("Hello world! ★★★")
+    main()
+
