@@ -1,5 +1,6 @@
-DATA_SET_FILE_PATH = "casos_prueba_catedra/"
+import random
 
+DATA_SET_FILE_PATH = "casos_prueba_catedra/"
 
 def get_data_set_from_txt(file):
     data_set = []
@@ -15,7 +16,6 @@ def get_data_set_from_txt(file):
             data_set.append(l_tuple)
     return data_set
 
-
 def get_optimal_analisis_order(teams_list):
     optimal_analisis_order = sorted(teams_list, key= lambda team:team[1], reverse=True)
     return optimal_analisis_order
@@ -29,13 +29,25 @@ def aux_get_analisis_duration(analisis_order):
         scaloni_wait_time += team[0]
     return team_analisis_max_duration
 
-def main():
+def make_teams_list(n_rivals):
+    teams_list = []
+    for i in range(n_rivals):
+        teams_list.append((random.randint(0, n_rivals+10),  random.randint(0, n_rivals+10)))
+    return teams_list
 
-    teams_list = get_data_set_from_txt('10000-elem.txt')
+def get_solution_analysis(teams_list, time_expected=-1):
+    print(f"Solution for a team list of {len(teams_list)} rivals")
+    solution = get_optimal_analisis_order(teams_list)
+    print("Optimal order is:", solution)
+    print("Analysis time is:", aux_get_analisis_duration(solution))
+    print(f"Time expected: {time_expected}")
     
-    return get_optimal_analisis_order(teams_list)
+def main():
+    
+    teams_list_test = teams_list = get_data_set_from_txt('10000-elem.txt')
+    print("Hello world! ★★★")
+    get_solution_analysis(teams_list_test)
+    print("--------------------------------------------------------")
+    get_solution_analysis(make_teams_list(15))
 
-
-print("Hello world! ★★★")
-optimal_order = main()
-print(aux_get_analisis_duration(optimal_order))
+main()
