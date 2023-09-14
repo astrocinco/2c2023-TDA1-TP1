@@ -65,5 +65,9 @@ def confirm_all_solutions_optimal():
     catedra_data_sets_analysis(catedra_test_files)
 
 
+def get_optimal_order_from_txt(path):
+    return solutions.get_optimal_analisis_order(sets.get_data_set_from_txt(path))
+
+
 if __name__ == "__main__":
    confirm_all_solutions_optimal()
