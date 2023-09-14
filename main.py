@@ -28,7 +28,7 @@ def solution_analysis(teams_list, time_expected=0, show_solution=False):
     solution = get_optimal_analisis_order(teams_list)
     end_time = time.time()
     
-    solution_time = aux_get_analisis_duration(solution)
+    solution_time = get_analisis_duration(solution)
     excecution_time = end_time - start_time
     
     print("--------------------------------------------------------")
@@ -49,7 +49,7 @@ def catedra_data_sets_analysis(test_files, show_solution=False):
 
         
 def main(txt_data):
-    optimal_order = run_from_txt_data_set(txt_data)
+    optimal_order = get_optimal_analisis_order(CATEDRA_DATA_SET_FILE_PATH, get_data_set_from_txt(txt_data))
     print("Optimal order is:", optimal_order)
     print("Analisis time is:", get_analisis_duration(optimal_order))
 
