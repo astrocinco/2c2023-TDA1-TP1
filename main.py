@@ -13,10 +13,11 @@ def get_data_set_from_txt(file : str) -> tuple :
             data_set.append(l_tuple)
     return data_set
 
-
+# ---
 def get_optimal_analisis_order(teams_list):
     optimal_analisis_order = sorted(teams_list, key= lambda team:team[1], reverse=True)
     return optimal_analisis_order
+
 
 def aux_get_analisis_duration(analisis_order):
     team_analisis_max_duration = 0
@@ -26,31 +27,18 @@ def aux_get_analisis_duration(analisis_order):
             team_analisis_max_duration = scaloni_wait_time + team[0] + team[1]
         scaloni_wait_time += team[0]
     return team_analisis_max_duration
+# ---
 
-def main():
-    teams_list = get_data_set_from_txt('3 elemen.txt')
+def run_from_txt_data_set(txt_data):
+    teams_list = get_data_set_from_txt(txt_data)
     return get_optimal_analisis_order(teams_list)
 
-print("Hello world! ★★★")
-optimal_order = main()
-print("Optimal order is:", optimal_order)
-print("Analisis time is:", aux_get_analisis_duration(main()))
+
+def main(txt_data):
+    optimal_order = run_from_txt_data_set(txt_data)
+    print("Optimal order is:", optimal_order)
+    print("Analisis time is:", aux_get_analisis_duration(optimal_order))
 
 
-
-""" (3, 3),
-(5, 1),
-(1, 8), """
-
-
-
-""" (1, 3),
-(5, 1),
-(4, 8),
-(4, 3),
-(1, 5),
-(2, 9),
-(2, 2),
-(2, 4),
-(1, 6),
-(6, 5), """
+if __name__ == "__main__":
+   main("3 elem.txt")
