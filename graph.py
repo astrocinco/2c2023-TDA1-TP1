@@ -1,7 +1,7 @@
 #  pip install matplotlib
 
 import matplotlib.pyplot as plt
-import main
+import solutions
 
 
 def make_graph_from_analisis_order(analisis_order):
@@ -37,7 +37,7 @@ def make_graph_from_analisis_order(analisis_order):
 
 # Celeste: Scaloni
 # Azul: Ayudante
-make_graph_from_analisis_order(main.run_from_txt_data_set("3 elem.txt"))
+make_graph_from_analisis_order(solutions.run_from_txt_data_set("3 elem.txt"))
 
 # No funciona, pero solución está acá
 # https://stackoverflow.com/questions/71654486/stacked-bar-chart-with-multiple-variables-in-python
