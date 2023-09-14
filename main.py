@@ -7,6 +7,9 @@ SCALONI_ANALYSIS = 0
 ASISTENT_ANALYSIS = 1
 
 
+####
+
+
 def get_optimal_analisis_order(teams_list):
     optimal_analisis_order = sorted(teams_list, key= lambda team:team[1], reverse=True)
     return optimal_analisis_order
