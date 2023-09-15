@@ -1,8 +1,11 @@
 import solutions
 import sets
-import time
+import graph
+
+import time as t
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 
 def compare_solutions(data_set_size, amount):
@@ -38,36 +41,83 @@ def random_graph():
     plt.show()
     
 
-def solution_analysis(teams_list, duration_expected=0, show_solution=False):
-    solution = solutions.get_optimal_analisis_order(teams_list)
-    solution_time = solutions.get_analisis_duration(solution)
+def solution_analysis(teams_list, solution_method=solutions.get_optimal_analisis_order):
+    solution = solution_method(teams_list)
+    solution_time_duration = solutions.get_analisis_duration(solution)
+    return (solution, solution_time_duration)
     
-    print("---")
-    print(f"Solution for a team list of {len(teams_list)} rivals")
-    if(show_solution): print("Optimal order is:", solution)
-    print("Analysis time duration is: ", solution_time)
-    if(duration_expected): print("Time expected: ", duration_expected)
+def dataframe_append(df, row):
+    df_aux = pd.DataFrame(data=row, index=[df.shape[0]])
+    return pd.concat([df, df_aux])
     
-    return (solution, solution_time, duration_expected)
+def catedra_data_sets_analysis(test_files):
+    results = pd.DataFrame()
+    for file in test_files:
+        
+        teams_list = sets.get_data_set_from_txt(file)
+        optimal_duration = sets.get_optimal_time_from_txt(len(teams_list))
+        (solution, solution_duration) = solution_analysis(teams_list)
+        
+        durations_row = {"n": len(teams_list), "solution": solution_duration, "optimal": optimal_duration}
+        results = dataframe_append(results, durations_row)
     
-    
-def catedra_data_sets_analysis(test_files, show_solution=False):
+    return results
+
+def homemade_data_sets_analysis(test_files):
+    duration_results = pd.DataFrame()
+    execution_time_results = pd.DataFrame()  
+         
     for file in test_files:
         teams_list = sets.get_data_set_from_txt(file)
-        optimal_time_expected = sets.get_optimal_time_from_txt(len(teams_list))
-        solution_analysis(teams_list, optimal_time_expected, show_solution=show_solution)
         
-
+        optimal_initial_time = t.time()
+        (optimal_sol, optimal_duration) = solution_analysis(teams_list)
+        
+        optimal_final_time = t.time()
+        
+        (brute_force_sol, brute_force_duration) = solution_analysis(teams_list, solution_method=solutions.get_brute_force_analisis_order)
+        brute_force_final_time = t.time()
+        
+        duration_row = {"n": len(teams_list), "optimal": optimal_duration, "brute_force": brute_force_duration}
+        duration_results = dataframe_append(duration_results, duration_row)
+        
+        optimal_time = (optimal_final_time - optimal_initial_time)*1000
+        brute_force_time = (brute_force_final_time - optimal_final_time)*1000
+        time_row = {"n": len(teams_list), "optimal": optimal_time, "brute_force": brute_force_time }
+        execution_time_results = dataframe_append(execution_time_results, time_row)
+        
+        '''
+        
+        Graficos de ordenes que son igual de optimos pero no coinciden
+        
+        if((optimal_sol != brute_force_sol)):
+            #plt.style.use('ggplot') - Matplot Theme
+            #plt.xlabel("Videos")
+            #plt.ylabel("Duracion")
+            #title="Algoritmo propio - Duracion maxima: " + str(optimal_duration)
+            graph.make_graph_from_analisis_order(optimal_sol)
+            #title="Algoritmo fuerza bruta - Duracion maxima: " + str(brute_force_duration)
+            graph.make_graph_from_analisis_order(brute_force_sol)
+        '''
+    
+            
+    return (duration_results, execution_time_results)
+    
 def confirm_all_solutions_optimal():
-    print("Hello world! ★★★")
-    test_files=['3-elem.txt','10-elem.txt','100-elem.txt','10000-elem.txt']
-    catedra_test_files = ["./casos_prueba_catedra/"+ file for file in test_files] 
-    catedra_data_sets_analysis(catedra_test_files)
-
-
-def get_optimal_order_from_txt(path):
-    return solutions.get_optimal_analisis_order(sets.get_data_set_from_txt(path))
-
+    catedra_test_files=['3-elem.txt','10-elem.txt','100-elem.txt','10000-elem.txt']
+    catedra_test_path = ["./casos_prueba_catedra/"+ file for file in catedra_test_files] 
+    
+    catedra_duration_results = catedra_data_sets_analysis(catedra_test_path)
+    
+    test_files=[str(n) + '-elem.txt' for n in range(3, 11)]
+    test_path = ["./casos_prueba/"+ file for file in test_files] 
+    
+    (homemade_durations_results, homemade_execution_time_results) = homemade_data_sets_analysis(test_path)
+    
+    print(catedra_duration_results)
+    print(homemade_durations_results)
+    print(homemade_execution_time_results)
+    
 
 if __name__ == "__main__":
    confirm_all_solutions_optimal()

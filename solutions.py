@@ -1,6 +1,17 @@
 SCALONI_INDEX = 0
 ASSISTANT_INDEX = 1
 
+from itertools import permutations
+
+def get_brute_force_analisis_order(teams_list):
+    
+    all_permutations = [list(p) for p in permutations(teams_list)]
+    
+    permutations_durations = [get_analisis_duration(p) for p in all_permutations]
+    optimal_index = permutations_durations.index(min(permutations_durations))
+    
+    return all_permutations[optimal_index]
+    
 
 def get_random_analisis_order(teams_list):
     from random import shuffle
