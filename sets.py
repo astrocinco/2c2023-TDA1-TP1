@@ -1,8 +1,6 @@
 import sys
 import random
 
-DATA_SET_FILE_PATH = "./casos_prueba/"
-
 def get_optimal_time_from_txt(n_elements):
     file= './casos_prueba_catedra/Tiempos optimos.txt'
     optimal_value = 0
@@ -38,11 +36,14 @@ def get_random_teams_list(n_rivals):
 def write_data_set_file(path, teams_list):
     file = path + str(len(teams_list)) + "-elem.txt"
     with open(file,'w') as o_file:
-         for team in teams_list:
-             o_file.write(str(team[0]) + "," + str(team[1]) + "\n")
+        o_file.write("S_i,A_i" + "\n")
+        for team in teams_list:
+            o_file.write(str(team[0]) + "," + str(team[1]) + "\n")
 
 
 def create_random_file_from_arg():
     random_teams_list = get_random_teams_list(int(sys.argv[1]))
-    write_data_set_file(DATA_SET_FILE_PATH, random_teams_list)
+    write_data_set_file("./casos_prueba/", random_teams_list)
 
+if __name__ == "__main__":
+    create_random_file_from_arg()
