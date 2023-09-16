@@ -1,8 +1,8 @@
 import solutions
 import sets
-import graph
 
 import time as t
+import timeit
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -45,9 +45,9 @@ def solution_analysis(teams_list, solution_method=solutions.get_optimal_analisis
     solution = solution_method(teams_list)
     solution_time_duration = solutions.get_analisis_duration(solution)
     return (solution, solution_time_duration)
-    
-def dataframe_append(df, row):
-    df_aux = pd.DataFrame(data=row, index=[df.shape[0]])
+
+def dataframe_append(df, idx, row):
+    df_aux = pd.DataFrame(data=row, index=[idx])
     return pd.concat([df, df_aux])
     
 def catedra_data_sets_analysis(test_files):
@@ -60,8 +60,8 @@ def catedra_data_sets_analysis(test_files):
         (solution, alternative_duration) = solution_analysis(teams_list, solutions.get_alternative_analisis_order)
         (solution, ramdom_duration) = solution_analysis(teams_list, solutions.get_random_analisis_order)
         
-        durations_row = {"n": len(teams_list), "solution": solution_duration, "optimal": optimal_duration, "alternative": alternative_duration, "random": ramdom_duration}
-        results = dataframe_append(results, durations_row)
+        durations_row = {"solution": solution_duration, "optimal": optimal_duration, "alternative": alternative_duration, "random": ramdom_duration}
+        results = dataframe_append(results, len(teams_list), durations_row)
     
     return results
 
@@ -84,43 +84,25 @@ def homemade_data_sets_analysis(test_files):
         (solution, alternative_duration) = solution_analysis(teams_list, solutions.get_alternative_analisis_order)
         (solution, ramdom_duration) = solution_analysis(teams_list, solutions.get_random_analisis_order)
         
-        duration_row = {"n": len(teams_list), "optimal": optimal_duration, "brute_force": brute_force_duration, "alternative": alternative_duration, "ramdom": ramdom_duration}
-        duration_results = dataframe_append(duration_results, duration_row)
+        duration_row = {"optimal": optimal_duration, "brute_force": brute_force_duration, "alternative": alternative_duration, "random": ramdom_duration}
+        duration_results = dataframe_append(duration_results, len(teams_list) ,duration_row)
         
         optimal_time = (optimal_final_time - optimal_initial_time)*1000
         brute_force_time = (brute_force_final_time - optimal_final_time)*1000
-        time_row = {"n": len(teams_list), "optimal": optimal_time, "brute_force": brute_force_time }
-        execution_time_results = dataframe_append(execution_time_results, time_row)
+        time_row = {"optimal": optimal_time, "brute_force": brute_force_time }
+        execution_time_results = dataframe_append(execution_time_results, len(teams_list), time_row)
         
         if((optimal_sol != brute_force_sol)):
             discrepancies.append({'optimal': optimal_sol, 'brute_force': brute_force_sol})
     
             
     return (duration_results, execution_time_results, discrepancies)
-    
-def all_data_sets_analysis():
-    catedra_test_files=['3-elem.txt','10-elem.txt','100-elem.txt','10000-elem.txt']
-    catedra_test_path = ["./casos_prueba_catedra/"+ file for file in catedra_test_files] 
-    
-    catedra_duration_results = catedra_data_sets_analysis(catedra_test_path)
-    
-    test_files=[str(n) + '-elem.txt' for n in range(3, 11)]
-    test_path = ["./casos_prueba/"+ file for file in test_files] 
-    
-    (homemade_durations_results, homemade_execution_time_results, brute_force_discrepancies) = homemade_data_sets_analysis(test_path)
-    
-    ''''
-    print(catedra_duration_results)
-    print(homemade_durations_results)
-    print(homemade_execution_time_results)
-    print(brute_force_discrepancies)
-    '''
-    
-    #title="Algoritmo propio - Duracion maxima: " + str(optimal_duration)
-    #graph.make_graph_from_analisis_order(optimal_sol)
-    #title="Algoritmo fuerza bruta - Duracion maxima: " + str(brute_force_duration)
-    #graph.make_graph_from_analisis_order(brute_force_sol)
-    
 
-if __name__ == "__main__":
-   all_data_sets_analysis()
+def get_execution_time(method, max, rep):
+    df_time = pd.DataFrame()
+    for i in range(2, max):
+        aux_list = sets.get_random_teams_list(i)
+        time = timeit.timeit(lambda: method(aux_list), number=rep)
+        aux_df = pd.DataFrame({"time": time*1000}, index=[i])
+        df_time = pd.concat([df_time, aux_df])
+    return df_time
