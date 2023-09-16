@@ -3,10 +3,36 @@
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import solutions_analisis
-import sets
 
+def make_execution_time_graph(time_execution, title="Gráfico de tiempo de ejecución"):
+    plt.style.use('ggplot')
+    time_execution.plot()
+    plt.title(title)
+    plt.xlabel("Cantidad de elementos por set")
+    plt.ylabel("Tiempo [ms]")
+    plt.show()
 
+def method_difference_normalizated(df, solution, method):
+    df[method] = (df[method] - solution) / df.index
+    
+def make_graph_for_different_method_durations(durations, solution, df_name):
+    
+    df = durations
+    
+    sol = df[solution]
+    df = df.drop(columns=[solution], axis=1)
+
+    method_difference_normalizated(df, sol, "optimal")
+    method_difference_normalizated(df, sol, "alternative")
+    method_difference_normalizated(df, sol, "random")
+
+    plt.style.use('ggplot')
+    df.plot.bar(stacked=False)
+    plt.title("Gráfico comparativo entre diferentes métodos para " + df_name)
+    plt.xlabel("Cantidad de elementos por set")
+    plt.ylabel("Duración")
+    plt.show()
+    
 def make_graph_from_analisis_order(analisis_order, title="Gráfico de orden óptimo"):
     # Recibe un analisis order (lista de tuplas) e imprime en pantalla su gráfico
     scaloni_sum_from_order = []
@@ -20,7 +46,7 @@ def make_graph_from_analisis_order(analisis_order, title="Gráfico de orden ópt
         ayudante_from_order.append(tupla[1])
         scaloni_backlog += tupla[0]
 
-    dataFrame = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "Tiempo hasta comenzar": scaloni_sum_from_order,
             "Tiempo de Scaloni": scaloni_from_order,
@@ -29,15 +55,8 @@ def make_graph_from_analisis_order(analisis_order, title="Gráfico de orden ópt
     )
     
     plt.style.use('ggplot')
-    dataFrame.plot.bar(stacked=True, color=['whitesmoke', 'skyblue', 'steelblue'])
+    df.plot.bar(stacked=True, color=['whitesmoke', 'skyblue', 'steelblue'])
     plt.title(title)
     plt.xlabel("Videos")
     plt.ylabel("Duración")
-    #plt.ylim([0, 12]) #Para poder comparar entre gráficos, fijar el alto del eje Y
     plt.show()
-
-
-# Correr con:
-#make_graph_from_analisis_order(solutions_analisis.get_optimal_order_from_txt("./casos_prueba_catedra/10-elem.txt"))
-#make_graph_from_analisis_order([(1, 8), (5, 1), (3, 3),])
-#make_graph_from_analisis_order([ [3,6],[2,5],[4,1], ]) 
