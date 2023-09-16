@@ -60,7 +60,7 @@ def catedra_data_sets_analysis(test_files):
         (solution, alternative_duration) = solution_analysis(teams_list, solutions.get_alternative_analisis_order)
         (solution, ramdom_duration) = solution_analysis(teams_list, solutions.get_random_analisis_order)
         
-        durations_row = {"solution": solution_duration, "optimal": optimal_duration, "alternative": alternative_duration, "random": ramdom_duration}
+        durations_row = {"solution": solution_duration, "our proposal": optimal_duration, "alternative": alternative_duration, "random": ramdom_duration}
         results = dataframe_append(results, len(teams_list), durations_row)
     
     return results
@@ -84,16 +84,16 @@ def homemade_data_sets_analysis(test_files):
         (solution, alternative_duration) = solution_analysis(teams_list, solutions.get_alternative_analisis_order)
         (solution, ramdom_duration) = solution_analysis(teams_list, solutions.get_random_analisis_order)
         
-        duration_row = {"optimal": optimal_duration, "brute_force": brute_force_duration, "alternative": alternative_duration, "random": ramdom_duration}
+        duration_row = {"our proposal": optimal_duration, "brute_force": brute_force_duration, "alternative": alternative_duration, "random": ramdom_duration}
         duration_results = dataframe_append(duration_results, len(teams_list) ,duration_row)
         
         optimal_time = (optimal_final_time - optimal_initial_time)*1000
         brute_force_time = (brute_force_final_time - optimal_final_time)*1000
-        time_row = {"optimal": optimal_time, "brute_force": brute_force_time }
+        time_row = {"our proposal": optimal_time, "brute_force": brute_force_time }
         execution_time_results = dataframe_append(execution_time_results, len(teams_list), time_row)
         
         if((optimal_sol != brute_force_sol)):
-            discrepancies.append({'optimal': optimal_sol, 'brute_force': brute_force_sol})
+            discrepancies.append({'our proposal': optimal_sol, 'brute_force': brute_force_sol})
     
             
     return (duration_results, execution_time_results, discrepancies)

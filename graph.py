@@ -4,6 +4,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+
 def make_execution_time_graph(time_execution, title="Gráfico de tiempo de ejecución"):
     plt.style.use('ggplot')
     time_execution.plot()
@@ -12,30 +13,30 @@ def make_execution_time_graph(time_execution, title="Gráfico de tiempo de ejecu
     plt.ylabel("Tiempo [ms]")
     plt.show()
 
+
 def method_difference_normalizated(df, solution, method):
     df[method] = (df[method] - solution) 
     
+
 def make_graph_for_different_method_durations(durations, solution, df_name):
     
     df = durations
-    
     sol = df[solution]
     df = df.drop(columns=[solution], axis=1)
 
- 
-    method_difference_normalizated(df, sol, "optimal")
+    method_difference_normalizated(df, sol, "our proposal")
     method_difference_normalizated(df, sol, "alternative")
     method_difference_normalizated(df, sol, "random")
 
-
     plt.style.use('ggplot')
     df.plot.bar(stacked=False)
-    plt.title("Gráfico comparativo entre diferentes métodos para " + df_name)
+    plt.title("Diferencia de resultado con la respuesta óptima para " + df_name)
     plt.xlabel("Cantidad de elementos por set")
     plt.ylabel("Resultado del analisis")
     plt.yscale('log')
     plt.show()
     
+
 def make_graph_from_analisis_order(analisis_order, title="Gráfico de orden óptimo"):
     # Recibe un analisis order (lista de tuplas) e imprime en pantalla su gráfico
     scaloni_sum_from_order = []
