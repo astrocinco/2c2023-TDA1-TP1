@@ -55,10 +55,12 @@ def catedra_data_sets_analysis(test_files):
     for file in test_files:
         
         teams_list = sets.get_data_set_from_txt(file)
-        optimal_duration = sets.get_optimal_time_from_txt(len(teams_list))
-        (solution, solution_duration) = solution_analysis(teams_list)
+        solution_duration = sets.get_optimal_time_from_txt(len(teams_list))
+        (solution, optimal_duration ) = solution_analysis(teams_list)
+        (solution, alternative_duration) = solution_analysis(teams_list, solutions.get_alternative_analisis_order)
+        (solution, ramdom_duration) = solution_analysis(teams_list, solutions.get_random_analisis_order)
         
-        durations_row = {"n": len(teams_list), "solution": solution_duration, "optimal": optimal_duration}
+        durations_row = {"n": len(teams_list), "solution": solution_duration, "optimal": optimal_duration, "alternative": alternative_duration, "random": ramdom_duration}
         results = dataframe_append(results, durations_row)
     
     return results
@@ -66,7 +68,8 @@ def catedra_data_sets_analysis(test_files):
 def homemade_data_sets_analysis(test_files):
     duration_results = pd.DataFrame()
     execution_time_results = pd.DataFrame()  
-         
+    discrepancies = []
+
     for file in test_files:
         teams_list = sets.get_data_set_from_txt(file)
         
@@ -78,7 +81,10 @@ def homemade_data_sets_analysis(test_files):
         (brute_force_sol, brute_force_duration) = solution_analysis(teams_list, solution_method=solutions.get_brute_force_analisis_order)
         brute_force_final_time = t.time()
         
-        duration_row = {"n": len(teams_list), "optimal": optimal_duration, "brute_force": brute_force_duration}
+        (solution, alternative_duration) = solution_analysis(teams_list, solutions.get_alternative_analisis_order)
+        (solution, ramdom_duration) = solution_analysis(teams_list, solutions.get_random_analisis_order)
+        
+        duration_row = {"n": len(teams_list), "optimal": optimal_duration, "brute_force": brute_force_duration, "alternative": alternative_duration, "ramdom": ramdom_duration}
         duration_results = dataframe_append(duration_results, duration_row)
         
         optimal_time = (optimal_final_time - optimal_initial_time)*1000
@@ -86,24 +92,13 @@ def homemade_data_sets_analysis(test_files):
         time_row = {"n": len(teams_list), "optimal": optimal_time, "brute_force": brute_force_time }
         execution_time_results = dataframe_append(execution_time_results, time_row)
         
-        '''
-        
-        Graficos de ordenes que son igual de optimos pero no coinciden
-        
         if((optimal_sol != brute_force_sol)):
-            #plt.style.use('ggplot') - Matplot Theme
-            #plt.xlabel("Videos")
-            #plt.ylabel("Duracion")
-            #title="Algoritmo propio - Duracion maxima: " + str(optimal_duration)
-            graph.make_graph_from_analisis_order(optimal_sol)
-            #title="Algoritmo fuerza bruta - Duracion maxima: " + str(brute_force_duration)
-            graph.make_graph_from_analisis_order(brute_force_sol)
-        '''
+            discrepancies.append({'optimal': optimal_sol, 'brute_force': brute_force_sol})
     
             
-    return (duration_results, execution_time_results)
+    return (duration_results, execution_time_results, discrepancies)
     
-def confirm_all_solutions_optimal():
+def all_data_sets_analysis():
     catedra_test_files=['3-elem.txt','10-elem.txt','100-elem.txt','10000-elem.txt']
     catedra_test_path = ["./casos_prueba_catedra/"+ file for file in catedra_test_files] 
     
@@ -112,12 +107,20 @@ def confirm_all_solutions_optimal():
     test_files=[str(n) + '-elem.txt' for n in range(3, 11)]
     test_path = ["./casos_prueba/"+ file for file in test_files] 
     
-    (homemade_durations_results, homemade_execution_time_results) = homemade_data_sets_analysis(test_path)
+    (homemade_durations_results, homemade_execution_time_results, brute_force_discrepancies) = homemade_data_sets_analysis(test_path)
     
+    ''''
     print(catedra_duration_results)
     print(homemade_durations_results)
     print(homemade_execution_time_results)
+    print(brute_force_discrepancies)
+    '''
+    
+    #title="Algoritmo propio - Duracion maxima: " + str(optimal_duration)
+    #graph.make_graph_from_analisis_order(optimal_sol)
+    #title="Algoritmo fuerza bruta - Duracion maxima: " + str(brute_force_duration)
+    #graph.make_graph_from_analisis_order(brute_force_sol)
     
 
 if __name__ == "__main__":
-   confirm_all_solutions_optimal()
+   all_data_sets_analysis()
