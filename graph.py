@@ -24,7 +24,7 @@ def make_graph_for_different_method_durations(durations, solution, df_name):
     sol = df[solution]
     df = df.drop(columns=[solution], axis=1)
 
-    method_difference_normalizated(df, sol, "our proposal")
+    method_difference_normalizated(df, sol, "our_proposal")
     method_difference_normalizated(df, sol, "alternative")
     method_difference_normalizated(df, sol, "random")
 
