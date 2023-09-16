@@ -13,7 +13,7 @@ def make_execution_time_graph(time_execution, title="Gráfico de tiempo de ejecu
     plt.show()
 
 def method_difference_normalizated(df, solution, method):
-    df[method] = (df[method] - solution) / df.index
+    df[method] = (df[method] - solution) 
     
 def make_graph_for_different_method_durations(durations, solution, df_name):
     
@@ -22,15 +22,18 @@ def make_graph_for_different_method_durations(durations, solution, df_name):
     sol = df[solution]
     df = df.drop(columns=[solution], axis=1)
 
+ 
     method_difference_normalizated(df, sol, "optimal")
     method_difference_normalizated(df, sol, "alternative")
     method_difference_normalizated(df, sol, "random")
+
 
     plt.style.use('ggplot')
     df.plot.bar(stacked=False)
     plt.title("Gráfico comparativo entre diferentes métodos para " + df_name)
     plt.xlabel("Cantidad de elementos por set")
-    plt.ylabel("Duración")
+    plt.ylabel("Resultado del analisis")
+    plt.yscale('log')
     plt.show()
     
 def make_graph_from_analisis_order(analisis_order, title="Gráfico de orden óptimo"):

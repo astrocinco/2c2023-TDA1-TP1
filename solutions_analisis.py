@@ -100,9 +100,13 @@ def homemade_data_sets_analysis(test_files):
 
 def get_execution_time(method, max, rep):
     df_time = pd.DataFrame()
-    for i in range(2, max):
-        aux_list = sets.get_random_teams_list(i)
-        time = timeit.timeit(lambda: method(aux_list), number=rep)
-        aux_df = pd.DataFrame({"time": time*1000}, index=[i])
+    for n_elements in range(2, max):
+        time = 0
+        for i in range(1, rep):
+            aux_list = sets.get_random_teams_list(n_elements)
+            time += timeit.timeit(lambda: method(aux_list), number=25)
+        time = time / rep
+        
+        aux_df = pd.DataFrame({"time": time*1000}, index=[n_elements])
         df_time = pd.concat([df_time, aux_df])
     return df_time
