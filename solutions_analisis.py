@@ -72,23 +72,18 @@ def homemade_data_sets_analysis(test_files):
 
     for file in test_files:
         teams_list = sets.get_data_set_from_txt(file)
-        
-        optimal_initial_time = t.time()
+    
         (optimal_sol, optimal_duration) = solution_analysis(teams_list)
-        
-        optimal_final_time = t.time()
-        
         (brute_force_sol, brute_force_duration) = solution_analysis(teams_list, solution_method=solutions.get_brute_force_analisis_order)
-        brute_force_final_time = t.time()
-        
         (solution, alternative_duration) = solution_analysis(teams_list, solutions.get_alternative_analisis_order)
         (solution, ramdom_duration) = solution_analysis(teams_list, solutions.get_random_analisis_order)
         
         duration_row = {"our_proposal": optimal_duration, "brute_force": brute_force_duration, "alternative": alternative_duration, "random": ramdom_duration}
         duration_results = dataframe_append(duration_results, len(teams_list) ,duration_row)
         
-        optimal_time = (optimal_final_time - optimal_initial_time)*1000
-        brute_force_time = (brute_force_final_time - optimal_final_time)*1000
+        optimal_time = timeit.timeit(lambda: solution_analysis(teams_list), number=100) * 1000
+        brute_force_time = timeit.timeit(lambda: solution_analysis(teams_list, solution_method=solutions.get_brute_force_analisis_order), number=100) * 1000
+        
         time_row = {"our_proposal": optimal_time, "brute_force": brute_force_time }
         execution_time_results = dataframe_append(execution_time_results, len(teams_list), time_row)
         
@@ -98,13 +93,13 @@ def homemade_data_sets_analysis(test_files):
             
     return (duration_results, execution_time_results, discrepancies)
 
-def get_execution_time(method, max, rep):
+def get_execution_time(method, max, rep, size):
     df_time = pd.DataFrame()
     for n_elements in range(2, max):
         time = 0
         for i in range(1, rep):
             aux_list = sets.get_random_teams_list(n_elements)
-            time += timeit.timeit(lambda: method(aux_list), number=25)
+            time += timeit.timeit(lambda: method(aux_list), number=size)
         time = time / rep
         
         aux_df = pd.DataFrame({"time": time*1000}, index=[n_elements])
