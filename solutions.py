@@ -1,11 +1,14 @@
 import sys
 import sets
+from random import shuffle
 
 SCALONI_INDEX = 0
 ASSISTANT_INDEX = 1
 
 from itertools import permutations
 
+#Devuelve una solución por fuerza bruta 
+# (compara todas las permutaciones de los elementos y devuelve el que tenga menor duración total)
 def get_brute_force_analisis_order(teams_list):
     
     all_permutations = [list(p) for p in permutations(teams_list)]
@@ -15,23 +18,24 @@ def get_brute_force_analisis_order(teams_list):
     
     return all_permutations[optimal_index]
     
-
+# Devuelve una solución aleatoria
 def get_random_analisis_order(teams_list):
-    from random import shuffle
     shuffle(teams_list)
     return teams_list
 
-
+# Devuelve la solución alternativa - primer propuesta del informe 
+# (oredenar de menor a mayor por tiempo de Scaloni)
 def get_alternative_analisis_order(teams_list):
     example_order = sorted(teams_list, key= lambda team:team[SCALONI_INDEX], reverse = False)
     return example_order
 
-
+# Devuelve la solución óptima encontrada 
+# (ordenar de mayor a menor por tiempo de ayudantes)
 def get_optimal_analisis_order(teams_list):
     optimal_analisis_order = sorted(teams_list, key= lambda team:team[ASSISTANT_INDEX], reverse=True)
     return optimal_analisis_order
 
-
+# Devuelve el valor total de la duración del análsis de los videos
 def get_analisis_duration(analisis_order):
     team_analisis_max_duration = 0
     scaloni_wait_time = 0
@@ -49,7 +53,7 @@ flags:
     - -a : alternative solution
     - -r : random solution
     - -b : brute force solution
-    - -o : optimal solution
+    - default : optimal solution
 
 '''
 
