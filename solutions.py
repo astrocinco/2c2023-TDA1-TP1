@@ -23,7 +23,7 @@ def get_random_analisis_order(teams_list):
 
 
 def get_alternative_analisis_order(teams_list):
-    example_order = sorted(teams_list, key= lambda team:team[ASSISTANT_INDEX], reverse = False)
+    example_order = sorted(teams_list, key= lambda team:team[SCALONI_INDEX], reverse = False)
     return example_order
 
 
