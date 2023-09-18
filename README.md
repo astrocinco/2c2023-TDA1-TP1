@@ -1,5 +1,5 @@
-
 # TDA1-TP1
+Grupo compuesto por Martín González Prieto (105738), Santiago Langer (107912) y Camila Teszkiewicz (109660).
 
 - [TDA1-TP1](#tda1-tp1)
   - [Ejecución de archivos](#ejecución-de-archivos)
@@ -21,6 +21,14 @@
         -b # solución por fuerza bruta (compara todas las permutaciones y devuelve la mejor)
         
         default: nuestra propuesta de solución (ordenar de mayor a menor según el tiempo de los ayudantes)
+
+- Ejemplo para correr la **solución greedy**:
+
+        python3 solutions.py ./casos_prueba_catedra/10-elem.txt
+
+- Ejemplo para correr **solución por fuerza bruta**:
+
+        python3 solutions.py ./casos_prueba_catedra/10-elem.txt -b
 
 ### sets.py
 
