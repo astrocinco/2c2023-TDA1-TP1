@@ -4,16 +4,20 @@ import sets
 import timeit
 import pandas as pd
 
-
+# Obtiene la solución del analsis y su duracion total, dado un arregla con la informacion por video
+# y la funcion de dicho metodo (por default se realiza con nuestra propuesta de solucion)
 def solution_analysis(teams_list, solution_method=solutions.get_optimal_analisis_order):
     solution = solution_method(teams_list)
     solution_time_duration = solutions.get_analisis_duration(solution)
     return (solution, solution_time_duration)
 
+#Dado un dataframe agrega un fila de informacion en el index indicado (cantidad de datos del dataframe)
 def dataframe_append(df, idx, row):
     df_aux = pd.DataFrame(data=row, index=[idx])
     return pd.concat([df, df_aux])
-    
+
+# Devuelve un dataframe con la duracion total de los datasets de la catedra, obtendida por diferentes metodos 
+# (solucion dada por la catedra, nuestra propuesta, una propuesta alternativa, una solucion aleatoria)
 def catedra_data_sets_analysis(test_files):
     results = pd.DataFrame()
     for file in test_files:
@@ -29,6 +33,11 @@ def catedra_data_sets_analysis(test_files):
     
     return results
 
+# Devuelve 3 dataframe provenientes del analisis de nuestros datasets propios:
+#   durations_results: DataFrame de duraciones totales obtenidas por diferentes metodos 
+# (los mismos que catedra_data_sets_analysis incluyendo una solucion por fuerza bruta).
+#   execution time_results: Dataframe con el tiempo de ejecución de nuestra propuesta de solucion y de fuerza bruta.
+#   discrepancies: un vector de soluciones diferentes pero de misma duracion, obtenidas por nuestra propuesta de solucion y por fuerza bruta.
 def homemade_data_sets_analysis(test_files):
     duration_results = pd.DataFrame()
     execution_time_results = pd.DataFrame()  
@@ -57,6 +66,11 @@ def homemade_data_sets_analysis(test_files):
             
     return (duration_results, execution_time_results, discrepancies)
 
+# Dado un metodo para resolver el problema, 
+# devuelve un dataframe con un promedio del tiempo que demora para obtener la solución de una cantidad incremental de datasets
+# max: cantidad de datasets incrementales
+# rep: repeticiones a promediar
+# size: tamanio de cada operacion a repetir 
 def get_execution_time(method, max, rep, size):
     df_time = pd.DataFrame()
     for n_elements in range(2, max):
