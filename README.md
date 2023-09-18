@@ -26,7 +26,7 @@
 
     python3 sets.py [n]
 
-Crea un archivo en casos_prueba con una cantidad aleatoria n de elementos
+Crea un archivo en casos_prueba con una cantidad n de elementos aleatorios
 
 ## Gráficos y análisis
 
